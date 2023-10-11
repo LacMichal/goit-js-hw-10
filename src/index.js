@@ -24,7 +24,7 @@ function renderCountryList(countries) {
   clearUI();
   countryList.append(...listItems);
 }
-
+// generowanie kodu HTML na podstawie danych krajów
 function renderCountryInfo(country) {
   const countryDetails = `
     <div class="country-info">
@@ -43,13 +43,15 @@ function clearUI() {
   countryList.innerHTML = '';
   countryInfo.innerHTML = '';
 }
-
-function onSearchInput() {
+  // użycie metody trim , czyli usunięcie pierwszego i ostatniego pustego znaku 
+  function onSearchInput() {
   const searchValue = searchInput.value.trim();
   if (searchValue === '') {
     clearUI();
     return;
   }
+
+    // zapytanie do API o dane krajów, przetwarzanie wyników
   fetchCountries(searchValue)
     .then((countries) => {
       clearUI();
