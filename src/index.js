@@ -1,6 +1,6 @@
 import debounce from 'lodash/debounce';
 import Notiflix from 'notiflix';
-import { fetchCountries } from './api';
+import { fetchCountries } from './fetchCountries.js';
 
 // Odniesienia do elementów HTML
 const searchInput = document.querySelector('#search-box');
