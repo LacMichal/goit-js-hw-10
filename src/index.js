@@ -19,7 +19,7 @@ function renderCountryList(countries) {
   countryList.append(...listItems);
 }
 
-// Generowanie kodu HTML na podstawie danych krajów
+// Generuje kod HTML na podstawie informacji danych krajów 
 function renderCountryInfo(country) {
   const countryDetails = `
     <div class="country-info">
