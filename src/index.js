@@ -1,17 +1,11 @@
 import debounce from 'lodash/debounce';
 import Notiflix from 'notiflix';
+import { fetchCountries } from './api';
 
 // Odniesienia do elementów HTML
 const searchInput = document.querySelector('#search-box');
 const countryList = document.querySelector('.country-list');
 const countryInfo = document.querySelector('.country-info');
-
-// Zapytanie do API o dane krajów
-async function fetchCountries(searchTerm) {
-  const baseUrl = `https://restcountries.com/v3.1/name/${searchTerm}`;
-  const response = await fetch(baseUrl);
-  return response.json();
-}
 
 // Generuje kod HTML na podstawie danych krajów
 function renderCountryList(countries) {
@@ -24,7 +18,8 @@ function renderCountryList(countries) {
   clearUI();
   countryList.append(...listItems);
 }
-// generowanie kodu HTML na podstawie danych krajów
+
+// Generowanie kodu HTML na podstawie danych krajów
 function renderCountryInfo(country) {
   const countryDetails = `
     <div class="country-info">
@@ -43,25 +38,33 @@ function clearUI() {
   countryList.innerHTML = '';
   countryInfo.innerHTML = '';
 }
-  // użycie metody trim , czyli usunięcie pierwszego i ostatniego pustego znaku 
-  function onSearchInput() {
+
+// Użycie metody trim, czyli usunięcie pierwszego i ostatniego pustego znaku
+function onSearchInput() {
   const searchValue = searchInput.value.trim();
   if (searchValue === '') {
     clearUI();
     return;
   }
 
-    // zapytanie do API o dane krajów, przetwarzanie wyników
   fetchCountries(searchValue)
     .then((countries) => {
       clearUI();
-      if (countries.length === 0) {
-        Notiflix.Notify.failure('Oops, there is no country with that name.');
-      } else if (countries.length > 10) {
+      if (!countries) {
+        return Notiflix.Notify.failure('Oops, there is no country with that name.');
+      }
+
+      if (countries.length > 10) {
         Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
-      } else if (countries.length >= 2 && countries.length <= 10) {
+        return;
+      }
+
+      if (countries.length >= 2 && countries.length <= 10) {
         renderCountryList(countries);
-      } else {
+        return;
+      }
+
+      if (countries.length === 1) {
         renderCountryInfo(countries[0]);
       }
     })
